@@ -27,8 +27,6 @@
 
 ![avatar](doc/tokenbucket2.webg)
 
-![avatar](doc/tokenbucket3.webg)
-
 特点：
 
 - 能够限制调用的平均速率
