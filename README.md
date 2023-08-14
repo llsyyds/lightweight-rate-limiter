@@ -160,7 +160,7 @@ public class TestController {
         return new Response<>("0000", "成功", "success");
     }
 }
-
+```
 ### Nacos配置中心的Spring Boot应用接入
 
 可参考lightweight-rate-limiter-example/nacos-example工程
@@ -288,16 +288,23 @@ spring:
 增加prometheus依赖
 
 ```xml
-  <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-registry-prometheus</artifactId>
-      <version>1.6.4</version>
-  </dependency>
-  
-  <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-  </dependency>
+        <!--提供了创建和管理度量的基本API，想把度量数据发送给哪个监控器就使用micrometer-registry-*（如下图所示）-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.11.1</version>
+        </dependency>
+        <!--度量数据发送到 Prometheus依赖的库-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+            <version>1.11.1</version>
+        </dependency>
+        <!--提供了生产级的功能来监视和管理应用程序,可以容易地获取关于应用程序的各种运行时信息，如健康检查、度量、环境属性、线程转储等-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 ```
 
 - application.yml配置
