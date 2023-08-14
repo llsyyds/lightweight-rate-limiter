@@ -1,0 +1,7 @@
+# Project exclude paths
+/lightweight-rate-limiter-common/target/
+/lightweight-rate-limiter-core/target/
+/lightweight-rate-limiter-example/common-example/target/
+/lightweight-rate-limiter-example/springboot-example/target/
+/lightweight-rate-limiter-spi/target/
+/lightweight-rate-limiter-starter/ratelimiter-spring-boot-starter-common/target/
