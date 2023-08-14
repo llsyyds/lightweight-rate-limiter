@@ -23,7 +23,9 @@
 - 令牌桶有一个容量，当令牌桶满了的时候，再向其中放入的令牌就会被丢弃。
 - 每次一个请求过来，需要从令牌桶中获取一个令牌，如果有令牌，则提供服务；如果没有令牌，则拒绝服务。
 
-![avatar](doc/tokenbucket.jpg)
+![avatar](doc/tokenbucket.webg)
+![avatar](doc/tokenbucket2.webg)
+![avatar](doc/tokenbucket3.webg)
 
 特点：
 
