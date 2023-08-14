@@ -1,0 +1,3 @@
+token_bucket_rate_limiter=io.llsfish.ratelimiter.algorithm.TokenBucketRateLimiterAlgorithm
+leaky_bucket_rate_limiter=io.llsfish.ratelimiter.algorithm.LeakyBucketRateLimiterAlgorithm
+sliding_window_rate_limiter=io.llsfish.ratelimiter.algorithm.SlidingWindowRateLimiterAlgorithm

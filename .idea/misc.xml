@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-example/apollo-example/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-example/cloud-consul-example/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-example/cloud-zookeeper-example/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-example/etcd-example/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-example/zookeeper-example/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-starter/ratelimiter-spring-boot-starter-apollo/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-starter/ratelimiter-spring-boot-starter-cloud-consul/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-starter/ratelimiter-spring-boot-starter-cloud-zookeeper/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-starter/ratelimiter-spring-boot-starter-etcd/pom.xml" />
+        <option value="$PROJECT_DIR$/lightweight-rate-limiter-starter/ratelimiter-spring-boot-starter-zookeeper/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK" />
+</project>

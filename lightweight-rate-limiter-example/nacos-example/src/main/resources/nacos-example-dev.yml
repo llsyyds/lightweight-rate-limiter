@@ -1,0 +1,17 @@
+# nacos配置示例
+spring:
+  ratelimiter:
+    redis-config:
+      url: 127.0.0.1
+      database: 0
+    rate-limiter-configs:
+      - algorithmName: token_bucket_rate_limiter
+        rateLimiterKey : nacos-rate-test1
+        capacity: 100
+        rate: 10
+        expressionType: spel
+      - algorithmName: sliding_window_rate_limiter
+        rateLimiterKey: "'/nacos-rate/test2:' + #args[0].userId"
+        capacity: 1000
+        rate: 200
+        expressionType: spel

@@ -1,0 +1,40 @@
+server:
+  port: 8103
+
+spring:
+  application:
+    name: springboot-test
+  ratelimiter:
+    enableMonitor: true
+    redis-config:
+      url: 121.4.219.216
+      database: 0
+      password: gzpu44ry
+    rate-limiter-configs:
+      - algorithmName: leaky_bucket_rate_limiter
+        rateLimiterKey : key1
+        capacity: 100
+        rate: 10
+        expressionType: spel
+      - algorithmName: token_bucket_rate_limiter
+        rateLimiterKey: "'/Rate/spelTest:' + #args[0].userId"
+        capacity: 5
+        rate: 2
+        expressionType: spel
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name} # 附加到所有度量上面
+    web:
+      server:
+        request:
+          autotime:
+            enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*' # 暴露Actuator 端点
+  endpoint:
+    health:
+      show-details: always # 无论请求者是谁，健康检查的详细信息将始终显示

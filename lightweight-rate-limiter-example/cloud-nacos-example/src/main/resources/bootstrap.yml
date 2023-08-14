@@ -1,0 +1,18 @@
+server:
+  port: 8107
+
+spring:
+  application:
+    name: cloud-nacos-example
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        refresh-enabled: true
+        extension-configs:
+          - dataId: cloud-nacos-example-dev.yml
+            group: DEFAULT_GROUP
+            refresh: true

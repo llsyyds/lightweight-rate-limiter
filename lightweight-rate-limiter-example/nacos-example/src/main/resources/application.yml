@@ -1,0 +1,24 @@
+server:
+  port: 8106
+
+spring:
+  application:
+    name: nacos-example
+  profiles:
+    active: dev
+
+nacos:
+  config:
+    server-addr: 127.0.0.1:8848
+    type: yaml
+    data-id: nacos-example-dev.yml
+    auto-refresh: true
+    group: DEFAULT_GROUP
+    bootstrap:
+      enable: true
+      log-enable: true
+
+logging:
+  level:
+    #root: DEBUG
+    com.alibaba.nacos.client.config.impl: DEBUG

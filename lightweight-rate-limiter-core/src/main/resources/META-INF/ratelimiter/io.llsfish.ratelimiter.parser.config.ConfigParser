@@ -1,0 +1,4 @@
+yml=io.llsfish.ratelimiter.parser.config.YmlConfigParser
+yaml=io.llsfish.ratelimiter.parser.config.YmlConfigParser
+properties=io.llsfish.ratelimiter.parser.config.PropertiesConfigParser
+json=io.llsfish.ratelimiter.parser.config.JsonConfigParser
