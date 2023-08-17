@@ -7,9 +7,9 @@ spring:
   ratelimiter:
     enableMonitor: true
     redis-config:
-      url: 121.4.219.216
+      url: 127.0.0.1
       database: 0
-      password: gzpu44ry
+      password: 666666
     rate-limiter-configs:
       - algorithmName: leaky_bucket_rate_limiter
         rateLimiterKey : key1

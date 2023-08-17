@@ -9,6 +9,8 @@
 
 - 支持Naco配置中心配置限流指标
 
+- 支持properties，yaml/yml，json的配置文件格式
+
 - 支持Spel表达式，能够实现多维度限流
 
 - 自定义SPI机制，相比于Java的标准SPI，其更加灵活，带有自定义注解来加载特定的类，具有缓存功能
@@ -25,7 +27,7 @@
 - 令牌桶有一个容量，当令牌桶满了的时候，再向其中放入的令牌就会被丢弃。
 - 每当一个请求过来，会根据自身所需要的令牌数从令牌桶中获取一定量的令牌，如果令牌数足以提供该次请求的话，则提供服务；否则拒绝服务。
 
-![avatar](doc/tokenbucket2.png)
+![avatar](doc/tokenbucket.png)
 
 优点：
 
@@ -40,7 +42,7 @@
 
 水（请求）先进入到漏桶里，漏桶以一定的速度出水，当水流入速度过大会直接溢出（拒绝服务）
 
-![avatar](doc/loutong.jpg)
+![avatar](doc/leakybucket.jpg)
 
 优点：
 
@@ -58,15 +60,13 @@
 
 通过维护一个单位时间内的计数值，每当一个请求通过时，就将计数值加1，当计数值超过预先设定的阈值时，就拒绝单位时间内的其他请求。如果单位时间已经结束，则将计数器清零，开启下一轮的计数。
 
-![avatar](doc/countwindow.jpg)
+![avatar](doc/fixedwindow.png)
 
-`计数器固定窗口算法`有一个缺点，就是在窗口切换时可能会产生两倍于阈值流量的请求，如下图：
-
-![avatar](doc/countwindow2.jpg)
+`计数器固定窗口算法`有一个缺点，就是在窗口切换时可能会产生两倍于阈值流量的请求
 
 `计数器滑动窗口算法`是`计数器固定窗口算法`的改进，解决了固定窗口切换时可能会产生两倍于阈值流量请求的缺点。但是其需要更多的存储来跟踪请求的时间戳，实现相对复杂
 
-![avatar](doc/huadongwindow.jpg)
+![avatar](doc/slidingwindow.png)
 
 ### 限流算法总结
 
@@ -78,34 +78,19 @@ rate-limiter限流组件核心配置介绍，参考的配置格式为properties�
 
 - algorithmName：支持的限流算法，配置值如下：
 
-1. concurrent_request_rate_limiter（高并发限流算法）
-2. token_bucket_rate_limiter（令牌桶算法）
-3. leaky_bucket_rate_limiter（漏桶算法）
-4. sliding_window_rate_limiter（滑动窗口算法）
+1.token_bucket_rate_limiter（令牌桶算法）
+2.leaky_bucket_rate_limiter（漏桶算法）
+3.sliding_window_rate_limiter（滑动窗口算法）
 
-- redis-config.url：redis配置
-- redis-config.database：redis db编号
-- config-type：配置文件格式，支持properties，yaml，yml
-- rateLimiterKey：限流的key，与接口注解的key保持一致
-- expressionType：表达式类型，多维度限流的支持，默认是spel表达式，目前只支持spel表达式
+- spring.ratelimiter：自定义配置的统一前缀（拼接上下面的配置）
+- redis-config.url/database/password：redis配置（地址/db编号/密码）
+- rate-limiter-configs：限流相关配置（以一个数组形式存在）
+  algorithmName（限流算法）
+  rateLimiterKey（限流器标识，需与接口注解的key保持一致）
+  capacity：容量
+  rate：速率
+  expressionType：默认是spel表达式，目前也只支持spel表达式
 
-```properties
-# redis库编号
-spring.ratelimiter.redis-config.database=0
-# redis地址
-spring.ratelimiter.redis-config.url=127.0.0.1
-spring.ratelimiter.config-type=properties
-# 限流算法名
-spring.ratelimiter.rate-limiter-configs[0].algorithmName=sliding_window_rate_limiter
-# 容量
-spring.ratelimiter.rate-limiter-configs[0].capacity=200
-# 令牌生成速率
-spring.ratelimiter.rate-limiter-configs[0].rate=200
-# 限流key
-spring.ratelimiter.rate-limiter-configs[0].rateLimiterKey=zk-rate-test1
-# 表达式 spel
-spring.ratelimiter.rate-limiter-configs[0].expressionType=spel
-```
 
 ### Spring Boot应用接入
 
@@ -126,23 +111,25 @@ spring.ratelimiter.rate-limiter-configs[0].expressionType=spel
 - application.yml
 
 ```yaml
-server:
-  port: 8103
 spring:
+  application:
+    name: springboot-test
   ratelimiter:
+    enableMonitor: true
     redis-config:
       url: 127.0.0.1
       database: 0
+      password: 666666
     rate-limiter-configs:
-      - algorithmName: token_bucket_rate_limiter
+      - algorithmName: leaky_bucket_rate_limiter
         rateLimiterKey : key1
-        capacity: 1000
-        rate: 200
+        capacity: 100
+        rate: 10
         expressionType: spel
       - algorithmName: token_bucket_rate_limiter
         rateLimiterKey: "'/Rate/spelTest:' + #args[0].userId"
-        capacity: 1000
-        rate: 200
+        capacity: 100
+        rate: 10
         expressionType: spel
 ```
 
@@ -208,20 +195,24 @@ nacos:
 ```yaml
 # nacos配置示例
 spring:
+  application:
+    name: springboot-test
   ratelimiter:
+    enableMonitor: true
     redis-config:
       url: 127.0.0.1
       database: 0
+      password: 666666
     rate-limiter-configs:
-      - algorithmName: token_bucket_rate_limiter
-        rateLimiterKey : nacos-rate-test1
+      - algorithmName: leaky_bucket_rate_limiter
+        rateLimiterKey : key1
         capacity: 100
         rate: 10
         expressionType: spel
-      - algorithmName: sliding_window_rate_limiter
-        rateLimiterKey: "'/nacos-rate/test2:' + #args[0].userId"
-        capacity: 1000
-        rate: 200
+      - algorithmName: token_bucket_rate_limiter
+        rateLimiterKey: "'/Rate/spelTest:' + #args[0].userId"
+        capacity: 100
+        rate: 10
         expressionType: spel
 ```
 
@@ -267,20 +258,24 @@ spring:
 ```yaml
 # nacos配置示例
 spring:
+  application:
+    name: springboot-test
   ratelimiter:
+    enableMonitor: true
     redis-config:
       url: 127.0.0.1
       database: 0
+      password: 666666
     rate-limiter-configs:
-      - algorithmName: token_bucket_rate_limiter
-        rateLimiterKey : nacos-rate-test1
-        capacity: 1000
+      - algorithmName: leaky_bucket_rate_limiter
+        rateLimiterKey : key1
+        capacity: 100
         rate: 10
         expressionType: spel
-      - algorithmName: sliding_window_rate_limiter
-        rateLimiterKey: "'/nacos-rate/test2:' + #args[0].userId"
-        capacity: 1000
-        rate: 200
+      - algorithmName: token_bucket_rate_limiter
+        rateLimiterKey: "'/Rate/spelTest:' + #args[0].userId"
+        capacity: 100
+        rate: 10
         expressionType: spel
 
 ## 可观测性
@@ -318,11 +313,19 @@ spring:
 management:
   metrics:
     tags:
-      application: ${spring.application.name}
+      application: ${spring.application.name} # 附加到所有度量上面
+    web:
+      server:
+        request:
+          autotime:
+            enabled: true
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: '*' # 暴露Actuator 端点
+  endpoint:
+    health:
+      show-details: always # 无论请求者是谁，健康检查的详细信息将始终显示
 ```
 
 - Prometheus端服务发现配置
