@@ -277,7 +277,7 @@ spring:
         capacity: 100
         rate: 10
         expressionType: spel
-
+```
 ## 可观测性
 
 ### Prometheus + Grafana可观测性支持
